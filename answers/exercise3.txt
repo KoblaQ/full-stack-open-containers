@@ -1,0 +1,3 @@
+root@d6d04085ad0e:/# nano usr/src/app/index.js 
+root@d6d04085ad0e:/# cat usr/src/app/index.js 
+console.log('Hello World')
