@@ -1,12 +1,26 @@
 services:
+  todo-backend-app:
+    image: todo-backend-dev
+    ports:
+      - 3000:3000
+    build:
+      context: . # The context will pick this directory as the "build context"
+      dockerfile: dev.Dockerfile # This will simply tell which dockerfile to read
+    volumes:
+      - .:/usr/src/app
+    # depends_on:
+    #   - redis
+    environment:
+      - REDIS_URL=redis://redis:6379 # Needs to be redis and not localhost
+      - MONGO_URL=mongodb://${MONGO_INITDB_ROOT_USERNAME}:${MONGO_INITDB_ROOT_PASSWORD}@mongo:27017/${MONGO_INITDB_DATABASE}?authSource=admin
   mongo:
     image: mongo
     ports:
       - 3456:27017
     environment:
-      MONGO_INITDB_ROOT_USERNAME: root
-      MONGO_INITDB_ROOT_PASSWORD: example
-      MONGO_INITDB_DATABASE: the_database
+      MONGO_INITDB_ROOT_USERNAME: ${MONGO_INITDB_ROOT_USERNAME}
+      MONGO_INITDB_ROOT_PASSWORD: ${MONGO_INITDB_ROOT_PASSWORD}
+      MONGO_INITDB_DATABASE: ${MONGO_INITDB_DATABASE}
     volumes:
       - ./mongo/mongo-init.js:/docker-entrypoint-initdb.d/mongo-init.js
       # - ./mongo_data:/data/db. # For binding mount
@@ -17,7 +31,6 @@ services:
       - 6379:6379
     volumes:
       - redis_data:/data
-
 volumes:
   mongo_data:
   redis_data:
