@@ -17,7 +17,7 @@ COPY --from=build-stage /usr/src/app/dist /usr/src/app
 
 RUN npm run test
 
-# Production stage
+# Production stage (Must come after the test stage)
 FROM nginx:1.29-alpine
 
 COPY --from=build-stage /usr/src/app/dist /usr/share/nginx/html
